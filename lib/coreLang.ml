@@ -76,6 +76,10 @@ and expr =
   | Error of {
     name : string
   }
+  | Call of {
+    callee : expr;
+    args : expr list;
+  }
 
 and ctrl_stmt =
   | CAssign of {
@@ -95,7 +99,7 @@ and ctrl_stmt =
     v : expr option;
   }
   | CVarDecl of {
-    decl : var_decl
+    decl : decl
   }
 
 and prsr_stmt =
@@ -104,7 +108,7 @@ and prsr_stmt =
     rhs : expr;
   }
   | PVarDecl of {
-    decl : var_decl
+    decl : decl
   }
   | Select of {
     cases : select;
@@ -112,7 +116,7 @@ and prsr_stmt =
 
 and select = unit (* TODO *)
 
-and var_decl =
+and decl =
   | Variable of {
     typ : datatype;
     var : string;
@@ -124,35 +128,86 @@ and var_decl =
     var : string;
     (* TODO: possible an initialization block *)
   }
-
-and error_decl = string list
-
-and matchkind_decl = string list
-
-and typ_decl = {
-  typ : coretype;
-  name : string;
-}
+  | ErrorDecl of {
+    errs : string list;
+  }
+  | MatchKind of {
+    mks : string list;
+  }
+  | Type of {
+    typ : coretype;
+    name : string;
+  }
+  | Extern of unit (* TODO *)
+  | Function of unit (* TODO *)
 
 and obj_decl =
-  | Table of table_decl
   | Control of control_decl
   | Parser of parser_decl
 
+and control_decl = {
+  ctrl_args : arg list;
+  actions : action_decl list;
+  tbls : table_decl list;
+  apply : ctrl_stmt list;
+}
+
+and parser_decl = {
+  prsr_args : arg list;
+  states : state list;
+} (* TODO *)
+
+and arg = unit (* TODO *)
+
+and state = prsr_stmt list
+
+and action_decl = unit (* TODO *)
+
 and table_decl = unit (* TODO *)
 
-and control_decl = unit (* TODO *)
-
-and parser_decl = unit (* TODO *)
-
-and extern_decl = unit (* TODO *)
+and pkg_invocation
 
 and program = {
-  error : error_decl;
-  matchkind : matchkind_decl;
-  externs : extern_decl list;
-  typs : typ_decl list;
-  vars : var_decl list;
-  objs : obj_decl list;
-  main : ctrl_stmt list;
+  decls : decl list;
+  objs : obj_decl list; (* don't be so strict about separation *)
+  main : (ctrl_stmt list * pkg_invocation);
 }
+
+
+(** How to get there? 
+
+1)  Global substitution of constants and typdefs (optional). Result
+    should be a valid P4 program passing our type-checker.
+
+2)  Inline function bodies and copy-in/copy-out, including method calls,
+    function calls nested in expressions, explicit action calls. Should also
+    inline the copy-in/copy-out semantics for direct applications, extern
+    function/method/constructor calls, and built-in function calls.
+    Result should be a valid P4 program passing our type-checker.
+
+3)  Inline nested parser/control declarations by lifting parser states from
+    sub-parses, inlining apply blocks of sub-controls, and lifting local
+    declarations from sub-parsers and sub-controls. Result should be a valid
+    P4 program passing our type-checker.
+
+4)  Collapse error and matchkind declarations and lift them to the top of the
+    program. Result should be a valid P4 program passing our type-checker.
+
+5)  For the remaining parsers and controls, lift the local declarations to
+    global space. Result should be expressable in our P4 AST, but may not
+    pass the type-checker due to restrictions on various kinds of declarations.
+    We may be able to run a subset of the type-checker.
+
+6)  Translation from P4 into the P4 core language described above. Most of the
+    transformations are related to expressing some of P4's more complex data
+    types in terms of headers and structs.
+
+Notes : 
+
+- Keep externs in the syntax in some simplified form.
+
+- Keep architectures/packages abstract; translation is not target-dependent
+
+
+
+*)
