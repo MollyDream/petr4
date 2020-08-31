@@ -101,6 +101,10 @@ and ctrl_stmt =
   | CVarDecl of {
     decl : decl
   }
+  | MethodCall of {
+    callee : expr;
+    args : expr list
+  }
 
 and prsr_stmt =
   | PAssign of {
@@ -179,28 +183,25 @@ and program = {
 1)  Global substitution of constants and typdefs (optional). Result
     should be a valid P4 program passing our type-checker.
 
-2)  Inline function bodies and copy-in/copy-out, including method calls,
-    function calls nested in expressions, explicit action calls. Should also
-    inline the copy-in/copy-out semantics for direct applications, extern
-    function/method/constructor calls, and built-in function calls.
-    Result should be a valid P4 program passing our type-checker.
-
-3)  Inline nested parser/control declarations by lifting parser states from
+2)  Inline nested parser/control declarations by lifting parser states from
     sub-parses, inlining apply blocks of sub-controls, and lifting local
     declarations from sub-parsers and sub-controls. Result should be a valid
     P4 program passing our type-checker.
 
-4)  Collapse error and matchkind declarations and lift them to the top of the
-    program. Result should be a valid P4 program passing our type-checker.
+3)  Collapse error and matchkind declarations and lift them to the top of the
+    program. Result should be a valid P4 program passing our type-checker
+    (for convenience only; optional).
 
-5)  For the remaining parsers and controls, lift the local declarations to
+4)  For the remaining parsers and controls, lift the local declarations to
     global space. Result should be expressable in our P4 AST, but may not
     pass the type-checker due to restrictions on various kinds of declarations.
     We may be able to run a subset of the type-checker.
 
-6)  Translation from P4 into the P4 core language described above. Most of the
+5)  Translation from P4 into the P4 core language described above. Most of the
     transformations are related to expressing some of P4's more complex data
     types in terms of headers and structs.
+
+6)  Inlining method calls and correctly removing copy-in/copy-out.
 
 Notes : 
 
@@ -208,6 +209,8 @@ Notes :
 
 - Keep architectures/packages abstract; translation is not target-dependent
 
-
+- Keep functions & copy-in/copy out; could remove function calls and
+  copy-in/copy-out, but it would be rather non-trivial. Idea: introduce
+  e-seq and lower.
 
 *)
