@@ -1,6 +1,7 @@
 # Notes
 
-This repository is forked from Petr4 (https://github.com/cornell-netlab/petr4). 
+This repository is forked from Petr4 (https://github.com/cornell-netlab/petr4) 
+and is a submodule of ProD3 (https://github.com/MollyDream/ProD3).
 All the changes are kept in `prod3/`. To properly set up the ocaml toplevel, 
 you need to include the following lines in `~/.ocamlinit`.
 
