@@ -1,3 +1,55 @@
+# Notes
+
+This repository is forked from Petr4 (https://github.com/cornell-netlab/petr4). 
+All the changes are kept in `prod3/`. To properly set up the ocaml toplevel, 
+you need to include the following lines in `~/.ocamlinit`.
+
+```
+#use "topfind"
+#thread
+#require "core.top"
+#directory "+compiler-libs"
+
+ let try_finally ~always f =
+   match f () with
+   | x ->
+     always ();
+     x
+   | exception e ->
+     always ();
+     raise e
+
+ let use_output command =
+   let fn = Filename.temp_file "ocaml" "_toploop.ml" in
+   try_finally
+     ~always:(fun () -> try Sys.remove fn with Sys_error _ -> ())
+     (fun () ->
+       match
+         Printf.ksprintf Sys.command "%s > %s" command (Filename.quote fn)
+       with
+       | 0 -> ignore (Toploop.use_file Format.std_formatter fn : bool)
+       | n -> Format.printf "Command exited with code %d.@." n)
+
+ let () =
+   let name = "use_output" in
+   if not (Hashtbl.mem Toploop.directive_table name) then
+     Hashtbl.add Toploop.directive_table name
+       (Toploop.Directive_string use_output)
+
+;;
+#remove_directory "+compiler-libs"
+```
+
+Then you can run the following commands in this repository:
+```
+ocaml
+
+ocaml> #use "./prod3/import.ml";;
+ocaml> #use "./prod3/new_main.ml";;
+ocaml> #use "./prod3/command.ml";;
+```
+You can change `command.ml` (see the code) to generate the parsed, elaborated and typed ASTs.
+
 # Welcome to Petr4
 
 The Petr4 project is developing the formal semantics of the [P4
