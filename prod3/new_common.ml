@@ -101,26 +101,33 @@ module Make_parse (Conf: Parse_config) = struct
     | `Error (info, err) ->
       Format.eprintf "%s: %s@\n%!" (Info.to_string info) (Exn.to_string err)
 
-
-  let print_prog prog =
-    Format.printf "%a@\n%!" Pretty.format_program prog;
+  (* Begin of printing code *)
+  let print_prog_1 (prog: Types.program) =
+    (* Format.printf "%a@\n%!" Pretty.format_program prog; *)
     Format.printf "----------@\n";
     Format.printf "%s@\n%!" (prog |> Types.program_to_yojson |> Yojson.Safe.pretty_to_string)
+
+  let print_prog_2 (prog : Prog.program) =
+    (* format_program expects a Types.program type*)
+    (* Format.printf "%a@\n%!" Pretty.format_program prog; *)
+    Format.printf "----------@\n";
+    Format.printf "%s@\n%!" (prog |> Prog.program_to_yojson |> Yojson.Safe.pretty_to_string)
 
   (* level = 1 -> parse | 2 -> elaborate | 3 -> typed | _ -> unkown *)
   let parse_print include_dirs p4_file (level: int) =
     match parse_file include_dirs p4_file false with
     | `Ok prog ->
-      if level = 1 then print_prog prog 
+      if level = 1 then print_prog_1 prog 
       else if level = 2 then
         let elab_prog, renamer = Elaborate.elab prog 
-        in print_prog elab_prog
+        in print_prog_1 elab_prog
       else if level = 3 then
         let elab_prog, renamer = Elaborate.elab prog in
         let (cenv, typed_prog) = Checker.check_program renamer elab_prog 
-        in print_prog typed_prog
+        in print_prog_2 typed_prog
       else failwith "Unknown parsing level."
-    | `Error (info, exn) as e-> e
+    | `Error (info, exn) -> failwith "Error during parsing."
+  (* End of printing code *)
 
 
   let eval_file include_dirs p4_file verbose pkt_str ctrl_json port target =

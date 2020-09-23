@@ -1,0 +1,2315 @@
+[
+  "program",
+  [
+    [
+      "Error",
+      {
+        "members": [
+          "NoError", "PacketTooShort", "NoMatch", "StackOutOfBounds",
+          "HeaderTooShort", "ParserTimeout", "ParserInvalidArgument"
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "packet_in",
+        "type_params": [],
+        "methods": [
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Bit", { "width": 32 } ],
+              "name": "length",
+              "type_params": [],
+              "params": []
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "advance",
+              "type_params": [],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "sizeInBits",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "TypeName", [ "BareName", "T1" ] ],
+              "name": "lookahead",
+              "type_params": [ "T1" ],
+              "params": []
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "extract",
+              "type_params": [ "T0" ],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Out" ],
+                  "typ": [ "TypeName", [ "BareName", "T0" ] ],
+                  "variable": "variableSizeHeader",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "variableFieldSizeInBits",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "extract",
+              "type_params": [ "T" ],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Out" ],
+                  "typ": [ "TypeName", [ "BareName", "T" ] ],
+                  "variable": "hdr",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "packet_out",
+        "type_params": [],
+        "methods": [
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "emit",
+              "type_params": [ "T2" ],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "TypeName", [ "BareName", "T2" ] ],
+                  "variable": "hdr",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "verify",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "check",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Error" ],
+            "variable": "toSignal",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "Action",
+      {
+        "annotations": [],
+        "name": "NoAction",
+        "data_params": [],
+        "ctrl_params": [],
+        "body": { "annotations": [], "statements": [] }
+      }
+    ],
+    [ "MatchKind", { "members": [ "exact", "ternary", "lpm" ] } ],
+    [ "MatchKind", { "members": [ "range", "selector" ] } ],
+    [
+      "Struct",
+      {
+        "annotations": [
+          { "name": "metadata", "body": [ "Empty" ] },
+          {
+            "name": "name",
+            "body": [ "Unparsed", [ "\"standard_metadata\"" ] ]
+          }
+        ],
+        "name": "standard_metadata_t",
+        "fields": [
+          {
+            "annotations": [],
+            "type": [ "Bit", { "width": 9 } ],
+            "name": "ingress_port"
+          },
+          {
+            "annotations": [],
+            "type": [ "Bit", { "width": 9 } ],
+            "name": "egress_spec"
+          },
+          {
+            "annotations": [],
+            "type": [ "Bit", { "width": 9 } ],
+            "name": "egress_port"
+          },
+          {
+            "annotations": [],
+            "type": [ "Bit", { "width": 32 } ],
+            "name": "instance_type"
+          },
+          {
+            "annotations": [],
+            "type": [ "Bit", { "width": 32 } ],
+            "name": "packet_length"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"queueing_metadata.enq_timestamp\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 32 } ],
+            "name": "enq_timestamp"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"queueing_metadata.enq_qdepth\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 19 } ],
+            "name": "enq_qdepth"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"queueing_metadata.deq_timedelta\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 32 } ],
+            "name": "deq_timedelta"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"queueing_metadata.deq_qdepth\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 19 } ],
+            "name": "deq_qdepth"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"intrinsic_metadata.ingress_global_timestamp\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 48 } ],
+            "name": "ingress_global_timestamp"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"intrinsic_metadata.egress_global_timestamp\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 48 } ],
+            "name": "egress_global_timestamp"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"intrinsic_metadata.mcast_grp\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 16 } ],
+            "name": "mcast_grp"
+          },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [
+                  "Unparsed",
+                  [ "\"intrinsic_metadata.egress_rid\"" ]
+                ]
+              }
+            ],
+            "type": [ "Bit", { "width": 16 } ],
+            "name": "egress_rid"
+          },
+          {
+            "annotations": [],
+            "type": [ "Bit", { "width": 1 } ],
+            "name": "checksum_error"
+          },
+          { "annotations": [], "type": [ "Error" ], "name": "parser_error" },
+          {
+            "annotations": [
+              {
+                "name": "alias",
+                "body": [ "Unparsed", [ "\"intrinsic_metadata.priority\"" ] ]
+              }
+            ],
+            "type": [ "Bit", { "width": 3 } ],
+            "name": "priority"
+          }
+        ]
+      }
+    ],
+    [
+      "Enum",
+      {
+        "annotations": [],
+        "name": "CounterType",
+        "members": [ "packets", "bytes", "packets_and_bytes" ]
+      }
+    ],
+    [
+      "Enum",
+      {
+        "annotations": [],
+        "name": "MeterType",
+        "members": [ "packets", "bytes" ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "counter",
+        "type_params": [],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "counter",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "size",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "TypeName", [ "BareName", "CounterType" ] ],
+                  "variable": "type",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "count",
+              "type_params": [],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "index",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "direct_counter",
+        "type_params": [],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "direct_counter",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "TypeName", [ "BareName", "CounterType" ] ],
+                  "variable": "type",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "count",
+              "type_params": [],
+              "params": []
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "meter",
+        "type_params": [],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "meter",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "size",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "TypeName", [ "BareName", "MeterType" ] ],
+                  "variable": "type",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "execute_meter",
+              "type_params": [ "T3" ],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "index",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "Out" ],
+                  "typ": [ "TypeName", [ "BareName", "T3" ] ],
+                  "variable": "result",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "direct_meter",
+        "type_params": [ "T4" ],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "direct_meter",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "TypeName", [ "BareName", "MeterType" ] ],
+                  "variable": "type",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "read",
+              "type_params": [],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Out" ],
+                  "typ": [ "TypeName", [ "BareName", "T4" ] ],
+                  "variable": "result",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "register",
+        "type_params": [ "T5" ],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "register",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "size",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "write",
+              "type_params": [],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "index",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "TypeName", [ "BareName", "T5" ] ],
+                  "variable": "value",
+                  "opt_value": null
+                }
+              ]
+            }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Void" ],
+              "name": "read",
+              "type_params": [],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Out" ],
+                  "typ": [ "TypeName", [ "BareName", "T5" ] ],
+                  "variable": "result",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "index",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "action_profile",
+        "type_params": [],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "action_profile",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "size",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "random",
+        "type_params": [ "T6" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Out" ],
+            "typ": [ "TypeName", [ "BareName", "T6" ] ],
+            "variable": "result",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T6" ] ],
+            "variable": "lo",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T6" ] ],
+            "variable": "hi",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "digest",
+        "type_params": [ "T7" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bit", { "width": 32 } ],
+            "variable": "receiver",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T7" ] ],
+            "variable": "data",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "Enum",
+      {
+        "annotations": [],
+        "name": "HashAlgorithm",
+        "members": [
+          "crc32", "crc32_custom", "crc16", "crc16_custom", "random",
+          "identity", "csum16", "xor16"
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [
+          {
+            "name": "deprecated",
+            "body": [
+              "Unparsed",
+              [ "\"Please use mark_to_drop(standard_metadata) instead.\"" ]
+            ]
+          }
+        ],
+        "return": [ "Void" ],
+        "name": "mark_to_drop",
+        "type_params": [],
+        "params": []
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "mark_to_drop",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "hash",
+        "type_params": [ "O", "T8", "D", "M" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Out" ],
+            "typ": [ "TypeName", [ "BareName", "O" ] ],
+            "variable": "result",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "HashAlgorithm" ] ],
+            "variable": "algo",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T8" ] ],
+            "variable": "base",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "D" ] ],
+            "variable": "data",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "M" ] ],
+            "variable": "max",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [],
+        "name": "action_selector",
+        "type_params": [],
+        "methods": [
+          [
+            "Constructor",
+            {
+              "annotations": [],
+              "name": "action_selector",
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "TypeName", [ "BareName", "HashAlgorithm" ] ],
+                  "variable": "algorithm",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "size",
+                  "opt_value": null
+                },
+                {
+                  "annotations": [],
+                  "direction": [ "Directionless" ],
+                  "typ": [ "Bit", { "width": 32 } ],
+                  "variable": "outputWidth",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "Enum",
+      { "annotations": [], "name": "CloneType", "members": [ "I2E", "E2E" ] }
+    ],
+    [
+      "ExternObject",
+      {
+        "annotations": [
+          {
+            "name": "deprecated",
+            "body": [
+              "Unparsed",
+              [ "\"Please use verify_checksum/update_checksum instead.\"" ]
+            ]
+          }
+        ],
+        "name": "Checksum16",
+        "type_params": [],
+        "methods": [
+          [
+            "Constructor",
+            { "annotations": [], "name": "Checksum16", "params": [] }
+          ],
+          [
+            "Method",
+            {
+              "annotations": [],
+              "return": [ "Bit", { "width": 16 } ],
+              "name": "get",
+              "type_params": [ "D9" ],
+              "params": [
+                {
+                  "annotations": [],
+                  "direction": [ "In" ],
+                  "typ": [ "TypeName", [ "BareName", "D9" ] ],
+                  "variable": "data",
+                  "opt_value": null
+                }
+              ]
+            }
+          ]
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "verify_checksum",
+        "type_params": [ "T10", "O11" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "condition",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T10" ] ],
+            "variable": "data",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "O11" ] ],
+            "variable": "checksum",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "HashAlgorithm" ] ],
+            "variable": "algo",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "update_checksum",
+        "type_params": [ "T12", "O13" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "condition",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T12" ] ],
+            "variable": "data",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "O13" ] ],
+            "variable": "checksum",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "HashAlgorithm" ] ],
+            "variable": "algo",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "verify_checksum_with_payload",
+        "type_params": [ "T14", "O15" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "condition",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T14" ] ],
+            "variable": "data",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "O15" ] ],
+            "variable": "checksum",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "HashAlgorithm" ] ],
+            "variable": "algo",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "update_checksum_with_payload",
+        "type_params": [ "T16", "O17" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "condition",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T16" ] ],
+            "variable": "data",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "O17" ] ],
+            "variable": "checksum",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "HashAlgorithm" ] ],
+            "variable": "algo",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "resubmit",
+        "type_params": [ "T18" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T18" ] ],
+            "variable": "data",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "recirculate",
+        "type_params": [ "T19" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T19" ] ],
+            "variable": "data",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "clone",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "CloneType" ] ],
+            "variable": "type",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bit", { "width": 32 } ],
+            "variable": "session",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "clone3",
+        "type_params": [ "T20" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "CloneType" ] ],
+            "variable": "type",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bit", { "width": 32 } ],
+            "variable": "session",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "T20" ] ],
+            "variable": "data",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "truncate",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bit", { "width": 32 } ],
+            "variable": "length",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "assert",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "check",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ExternFunction",
+      {
+        "annotations": [],
+        "return": [ "Void" ],
+        "name": "assume",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "Bool" ],
+            "variable": "check",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ParserType",
+      {
+        "annotations": [],
+        "name": "Parser",
+        "type_params": [ "H", "M21" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "packet_in" ] ],
+            "variable": "b",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Out" ],
+            "typ": [ "TypeName", [ "BareName", "H" ] ],
+            "variable": "parsedHdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "M21" ] ],
+            "variable": "meta",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ControlType",
+      {
+        "annotations": [],
+        "name": "VerifyChecksum",
+        "type_params": [ "H22", "M23" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "H22" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "M23" ] ],
+            "variable": "meta",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ControlType",
+      {
+        "annotations": [ { "name": "pipeline", "body": [ "Empty" ] } ],
+        "name": "Ingress",
+        "type_params": [ "H24", "M25" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "H24" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "M25" ] ],
+            "variable": "meta",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ControlType",
+      {
+        "annotations": [ { "name": "pipeline", "body": [ "Empty" ] } ],
+        "name": "Egress",
+        "type_params": [ "H26", "M27" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "H26" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "M27" ] ],
+            "variable": "meta",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ControlType",
+      {
+        "annotations": [],
+        "name": "ComputeChecksum",
+        "type_params": [ "H28", "M29" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "H28" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "M29" ] ],
+            "variable": "meta",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "ControlType",
+      {
+        "annotations": [ { "name": "deparser", "body": [ "Empty" ] } ],
+        "name": "Deparser",
+        "type_params": [ "H30" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "packet_out" ] ],
+            "variable": "b",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "H30" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [
+      "PackageType",
+      {
+        "annotations": [],
+        "name": "V1Switch",
+        "type_params": [ "H31", "M32" ],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [
+              "SpecializedType",
+              {
+                "base": [ "TypeName", [ "BareName", "Parser" ] ],
+                "args": [
+                  [ "TypeName", [ "BareName", "H31" ] ],
+                  [ "TypeName", [ "BareName", "M32" ] ]
+                ]
+              }
+            ],
+            "variable": "p",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [
+              "SpecializedType",
+              {
+                "base": [ "TypeName", [ "BareName", "VerifyChecksum" ] ],
+                "args": [
+                  [ "TypeName", [ "BareName", "H31" ] ],
+                  [ "TypeName", [ "BareName", "M32" ] ]
+                ]
+              }
+            ],
+            "variable": "vr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [
+              "SpecializedType",
+              {
+                "base": [ "TypeName", [ "BareName", "Ingress" ] ],
+                "args": [
+                  [ "TypeName", [ "BareName", "H31" ] ],
+                  [ "TypeName", [ "BareName", "M32" ] ]
+                ]
+              }
+            ],
+            "variable": "ig",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [
+              "SpecializedType",
+              {
+                "base": [ "TypeName", [ "BareName", "Egress" ] ],
+                "args": [
+                  [ "TypeName", [ "BareName", "H31" ] ],
+                  [ "TypeName", [ "BareName", "M32" ] ]
+                ]
+              }
+            ],
+            "variable": "eg",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [
+              "SpecializedType",
+              {
+                "base": [ "TypeName", [ "BareName", "ComputeChecksum" ] ],
+                "args": [
+                  [ "TypeName", [ "BareName", "H31" ] ],
+                  [ "TypeName", [ "BareName", "M32" ] ]
+                ]
+              }
+            ],
+            "variable": "ck",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [
+              "SpecializedType",
+              {
+                "base": [ "TypeName", [ "BareName", "Deparser" ] ],
+                "args": [ [ "TypeName", [ "BareName", "H31" ] ] ]
+              }
+            ],
+            "variable": "dep",
+            "opt_value": null
+          }
+        ]
+      }
+    ],
+    [ "Struct", { "annotations": [], "name": "metadata", "fields": [] } ],
+    [ "Struct", { "annotations": [], "name": "headers", "fields": [] } ],
+    [
+      "Parser",
+      {
+        "annotations": [],
+        "name": "MyParser",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "packet_in" ] ],
+            "variable": "packet",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "Out" ],
+            "typ": [ "TypeName", [ "BareName", "headers" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "metadata" ] ],
+            "variable": "meta",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ],
+        "constructor_params": [],
+        "locals": [],
+        "states": [
+          {
+            "annotations": [],
+            "name": "start",
+            "statements": [],
+            "transition": [ "Direct", { "next": "accept" } ]
+          }
+        ]
+      }
+    ],
+    [
+      "Control",
+      {
+        "annotations": [],
+        "name": "MyIngress",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "headers" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "metadata" ] ],
+            "variable": "meta",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ],
+        "constructor_params": [],
+        "locals": [
+          [
+            "Action",
+            {
+              "annotations": [],
+              "name": "drop",
+              "data_params": [],
+              "ctrl_params": [],
+              "body": {
+                "annotations": [],
+                "statements": [
+                  {
+                    "stmt": [
+                      "method_call",
+                      {
+                        "func": {
+                          "expr": [ "Name", [ "BareName", "mark_to_drop" ] ],
+                          "typ": [
+                            "Function",
+                            {
+                              "type_params": [],
+                              "parameters": [
+                                {
+                                  "annotations": [],
+                                  "direction": [ "InOut" ],
+                                  "typ": [
+                                    "TypeName",
+                                    [ "BareName", "standard_metadata_t" ]
+                                  ],
+                                  "variable": "standard_metadata",
+                                  "opt_value": null
+                                }
+                              ],
+                              "kind": [ "Extern" ],
+                              "return": [ "Void" ]
+                            }
+                          ],
+                          "dir": [ "Directionless" ]
+                        },
+                        "type_args": [],
+                        "args": [
+                          {
+                            "expr": [
+                              "Name",
+                              [ "BareName", "standard_metadata" ]
+                            ],
+                            "typ": [
+                              "TypeName",
+                              [ "BareName", "standard_metadata_t" ]
+                            ],
+                            "dir": [ "InOut" ]
+                          }
+                        ]
+                      }
+                    ],
+                    "typ": [ "Unit" ]
+                  }
+                ]
+              }
+            }
+          ]
+        ],
+        "apply": {
+          "annotations": [],
+          "statements": [
+            {
+              "stmt": [
+                "method_call",
+                {
+                  "func": {
+                    "expr": [ "Name", [ "BareName", "drop" ] ],
+                    "typ": [
+                      "Action",
+                      { "data_params": [], "ctrl_params": [] }
+                    ],
+                    "dir": [ "Directionless" ]
+                  },
+                  "type_args": [],
+                  "args": []
+                }
+              ],
+              "typ": [ "Unit" ]
+            }
+          ]
+        }
+      }
+    ],
+    [
+      "Control",
+      {
+        "annotations": [],
+        "name": "MyEgress",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "headers" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "metadata" ] ],
+            "variable": "meta",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "standard_metadata_t" ] ],
+            "variable": "standard_metadata",
+            "opt_value": null
+          }
+        ],
+        "constructor_params": [],
+        "locals": [],
+        "apply": { "annotations": [], "statements": [] }
+      }
+    ],
+    [
+      "Control",
+      {
+        "annotations": [],
+        "name": "MyDeparser",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "Directionless" ],
+            "typ": [ "TypeName", [ "BareName", "packet_out" ] ],
+            "variable": "packet",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "In" ],
+            "typ": [ "TypeName", [ "BareName", "headers" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          }
+        ],
+        "constructor_params": [],
+        "locals": [],
+        "apply": { "annotations": [], "statements": [] }
+      }
+    ],
+    [
+      "Control",
+      {
+        "annotations": [],
+        "name": "MyVerifyChecksum",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "headers" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "metadata" ] ],
+            "variable": "meta",
+            "opt_value": null
+          }
+        ],
+        "constructor_params": [],
+        "locals": [],
+        "apply": { "annotations": [], "statements": [] }
+      }
+    ],
+    [
+      "Control",
+      {
+        "annotations": [],
+        "name": "MyComputeChecksum",
+        "type_params": [],
+        "params": [
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "headers" ] ],
+            "variable": "hdr",
+            "opt_value": null
+          },
+          {
+            "annotations": [],
+            "direction": [ "InOut" ],
+            "typ": [ "TypeName", [ "BareName", "metadata" ] ],
+            "variable": "meta",
+            "opt_value": null
+          }
+        ],
+        "constructor_params": [],
+        "locals": [],
+        "apply": { "annotations": [], "statements": [] }
+      }
+    ],
+    [
+      "Instantiation",
+      {
+        "annotations": [],
+        "type": [
+          "SpecializedType",
+          { "base": [ "TypeName", [ "BareName", "V1Switch" ] ], "args": [] }
+        ],
+        "args": [
+          {
+            "expr": [
+              "NamelessInstantiation",
+              {
+                "type": [
+                  "SpecializedType",
+                  {
+                    "base": [ "TypeName", [ "BareName", "MyParser" ] ],
+                    "args": []
+                  }
+                ],
+                "args": []
+              }
+            ],
+            "typ": [
+              "Parser",
+              {
+                "type_params": [],
+                "parameters": [
+                  {
+                    "annotations": [],
+                    "direction": [ "Directionless" ],
+                    "typ": [
+                      "Extern",
+                      {
+                        "type_params": [],
+                        "methods": [
+                          {
+                            "name": "length",
+                            "typ": {
+                              "type_params": [],
+                              "parameters": [],
+                              "kind": [ "Extern" ],
+                              "return": [ "Bit", { "width": 32 } ]
+                            }
+                          },
+                          {
+                            "name": "advance",
+                            "typ": {
+                              "type_params": [],
+                              "parameters": [
+                                {
+                                  "annotations": [],
+                                  "direction": [ "In" ],
+                                  "typ": [ "Bit", { "width": 32 } ],
+                                  "variable": "sizeInBits",
+                                  "opt_value": null
+                                }
+                              ],
+                              "kind": [ "Extern" ],
+                              "return": [ "Void" ]
+                            }
+                          },
+                          {
+                            "name": "lookahead",
+                            "typ": {
+                              "type_params": [ "T1" ],
+                              "parameters": [],
+                              "kind": [ "Extern" ],
+                              "return": [ "TypeName", [ "BareName", "T1" ] ]
+                            }
+                          },
+                          {
+                            "name": "extract",
+                            "typ": {
+                              "type_params": [ "T0" ],
+                              "parameters": [
+                                {
+                                  "annotations": [],
+                                  "direction": [ "Out" ],
+                                  "typ": [ "TypeName", [ "BareName", "T0" ] ],
+                                  "variable": "variableSizeHeader",
+                                  "opt_value": null
+                                },
+                                {
+                                  "annotations": [],
+                                  "direction": [ "In" ],
+                                  "typ": [ "Bit", { "width": 32 } ],
+                                  "variable": "variableFieldSizeInBits",
+                                  "opt_value": null
+                                }
+                              ],
+                              "kind": [ "Extern" ],
+                              "return": [ "Void" ]
+                            }
+                          },
+                          {
+                            "name": "extract",
+                            "typ": {
+                              "type_params": [ "T" ],
+                              "parameters": [
+                                {
+                                  "annotations": [],
+                                  "direction": [ "Out" ],
+                                  "typ": [ "TypeName", [ "BareName", "T" ] ],
+                                  "variable": "hdr",
+                                  "opt_value": null
+                                }
+                              ],
+                              "kind": [ "Extern" ],
+                              "return": [ "Void" ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "variable": "packet",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "Out" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "hdr",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "meta",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [
+                      "Struct",
+                      {
+                        "fields": [
+                          {
+                            "name": "ingress_port",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "egress_spec",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "egress_port",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "instance_type",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "packet_length",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "enq_timestamp",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "enq_qdepth",
+                            "typ": [ "Bit", { "width": 19 } ]
+                          },
+                          {
+                            "name": "deq_timedelta",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "deq_qdepth",
+                            "typ": [ "Bit", { "width": 19 } ]
+                          },
+                          {
+                            "name": "ingress_global_timestamp",
+                            "typ": [ "Bit", { "width": 48 } ]
+                          },
+                          {
+                            "name": "egress_global_timestamp",
+                            "typ": [ "Bit", { "width": 48 } ]
+                          },
+                          {
+                            "name": "mcast_grp",
+                            "typ": [ "Bit", { "width": 16 } ]
+                          },
+                          {
+                            "name": "egress_rid",
+                            "typ": [ "Bit", { "width": 16 } ]
+                          },
+                          {
+                            "name": "checksum_error",
+                            "typ": [ "Bit", { "width": 1 } ]
+                          },
+                          { "name": "parser_error", "typ": [ "Error" ] },
+                          {
+                            "name": "priority",
+                            "typ": [ "Bit", { "width": 3 } ]
+                          }
+                        ]
+                      }
+                    ],
+                    "variable": "standard_metadata",
+                    "opt_value": null
+                  }
+                ]
+              }
+            ],
+            "dir": [ "Directionless" ]
+          },
+          {
+            "expr": [
+              "NamelessInstantiation",
+              {
+                "type": [
+                  "SpecializedType",
+                  {
+                    "base": [
+                      "TypeName",
+                      [ "BareName", "MyVerifyChecksum" ]
+                    ],
+                    "args": []
+                  }
+                ],
+                "args": []
+              }
+            ],
+            "typ": [
+              "Control",
+              {
+                "type_params": [],
+                "parameters": [
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "hdr",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "meta",
+                    "opt_value": null
+                  }
+                ]
+              }
+            ],
+            "dir": [ "Directionless" ]
+          },
+          {
+            "expr": [
+              "NamelessInstantiation",
+              {
+                "type": [
+                  "SpecializedType",
+                  {
+                    "base": [ "TypeName", [ "BareName", "MyIngress" ] ],
+                    "args": []
+                  }
+                ],
+                "args": []
+              }
+            ],
+            "typ": [
+              "Control",
+              {
+                "type_params": [],
+                "parameters": [
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "hdr",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "meta",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [
+                      "Struct",
+                      {
+                        "fields": [
+                          {
+                            "name": "ingress_port",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "egress_spec",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "egress_port",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "instance_type",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "packet_length",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "enq_timestamp",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "enq_qdepth",
+                            "typ": [ "Bit", { "width": 19 } ]
+                          },
+                          {
+                            "name": "deq_timedelta",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "deq_qdepth",
+                            "typ": [ "Bit", { "width": 19 } ]
+                          },
+                          {
+                            "name": "ingress_global_timestamp",
+                            "typ": [ "Bit", { "width": 48 } ]
+                          },
+                          {
+                            "name": "egress_global_timestamp",
+                            "typ": [ "Bit", { "width": 48 } ]
+                          },
+                          {
+                            "name": "mcast_grp",
+                            "typ": [ "Bit", { "width": 16 } ]
+                          },
+                          {
+                            "name": "egress_rid",
+                            "typ": [ "Bit", { "width": 16 } ]
+                          },
+                          {
+                            "name": "checksum_error",
+                            "typ": [ "Bit", { "width": 1 } ]
+                          },
+                          { "name": "parser_error", "typ": [ "Error" ] },
+                          {
+                            "name": "priority",
+                            "typ": [ "Bit", { "width": 3 } ]
+                          }
+                        ]
+                      }
+                    ],
+                    "variable": "standard_metadata",
+                    "opt_value": null
+                  }
+                ]
+              }
+            ],
+            "dir": [ "Directionless" ]
+          },
+          {
+            "expr": [
+              "NamelessInstantiation",
+              {
+                "type": [
+                  "SpecializedType",
+                  {
+                    "base": [ "TypeName", [ "BareName", "MyEgress" ] ],
+                    "args": []
+                  }
+                ],
+                "args": []
+              }
+            ],
+            "typ": [
+              "Control",
+              {
+                "type_params": [],
+                "parameters": [
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "hdr",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "meta",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [
+                      "Struct",
+                      {
+                        "fields": [
+                          {
+                            "name": "ingress_port",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "egress_spec",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "egress_port",
+                            "typ": [ "Bit", { "width": 9 } ]
+                          },
+                          {
+                            "name": "instance_type",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "packet_length",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "enq_timestamp",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "enq_qdepth",
+                            "typ": [ "Bit", { "width": 19 } ]
+                          },
+                          {
+                            "name": "deq_timedelta",
+                            "typ": [ "Bit", { "width": 32 } ]
+                          },
+                          {
+                            "name": "deq_qdepth",
+                            "typ": [ "Bit", { "width": 19 } ]
+                          },
+                          {
+                            "name": "ingress_global_timestamp",
+                            "typ": [ "Bit", { "width": 48 } ]
+                          },
+                          {
+                            "name": "egress_global_timestamp",
+                            "typ": [ "Bit", { "width": 48 } ]
+                          },
+                          {
+                            "name": "mcast_grp",
+                            "typ": [ "Bit", { "width": 16 } ]
+                          },
+                          {
+                            "name": "egress_rid",
+                            "typ": [ "Bit", { "width": 16 } ]
+                          },
+                          {
+                            "name": "checksum_error",
+                            "typ": [ "Bit", { "width": 1 } ]
+                          },
+                          { "name": "parser_error", "typ": [ "Error" ] },
+                          {
+                            "name": "priority",
+                            "typ": [ "Bit", { "width": 3 } ]
+                          }
+                        ]
+                      }
+                    ],
+                    "variable": "standard_metadata",
+                    "opt_value": null
+                  }
+                ]
+              }
+            ],
+            "dir": [ "Directionless" ]
+          },
+          {
+            "expr": [
+              "NamelessInstantiation",
+              {
+                "type": [
+                  "SpecializedType",
+                  {
+                    "base": [
+                      "TypeName",
+                      [ "BareName", "MyComputeChecksum" ]
+                    ],
+                    "args": []
+                  }
+                ],
+                "args": []
+              }
+            ],
+            "typ": [
+              "Control",
+              {
+                "type_params": [],
+                "parameters": [
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "hdr",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "InOut" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "meta",
+                    "opt_value": null
+                  }
+                ]
+              }
+            ],
+            "dir": [ "Directionless" ]
+          },
+          {
+            "expr": [
+              "NamelessInstantiation",
+              {
+                "type": [
+                  "SpecializedType",
+                  {
+                    "base": [ "TypeName", [ "BareName", "MyDeparser" ] ],
+                    "args": []
+                  }
+                ],
+                "args": []
+              }
+            ],
+            "typ": [
+              "Control",
+              {
+                "type_params": [],
+                "parameters": [
+                  {
+                    "annotations": [],
+                    "direction": [ "Directionless" ],
+                    "typ": [
+                      "Extern",
+                      {
+                        "type_params": [],
+                        "methods": [
+                          {
+                            "name": "emit",
+                            "typ": {
+                              "type_params": [ "T2" ],
+                              "parameters": [
+                                {
+                                  "annotations": [],
+                                  "direction": [ "In" ],
+                                  "typ": [ "TypeName", [ "BareName", "T2" ] ],
+                                  "variable": "hdr",
+                                  "opt_value": null
+                                }
+                              ],
+                              "kind": [ "Extern" ],
+                              "return": [ "Void" ]
+                            }
+                          }
+                        ]
+                      }
+                    ],
+                    "variable": "packet",
+                    "opt_value": null
+                  },
+                  {
+                    "annotations": [],
+                    "direction": [ "In" ],
+                    "typ": [ "Struct", { "fields": [] } ],
+                    "variable": "hdr",
+                    "opt_value": null
+                  }
+                ]
+              }
+            ],
+            "dir": [ "Directionless" ]
+          }
+        ],
+        "name": "main",
+        "init": null
+      }
+    ]
+  ]
+]
