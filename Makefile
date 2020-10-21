@@ -1,49 +1,91 @@
-# Copyright 2019-present Cornell University
-#
-# Licensed under the Apache License, Version 2.0 (the "License"); you may not
-# use this file except in compliance with the License. You may obtain a copy
-# of the License at
-#
-#   http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
-# WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations
-# under the License.
+# ########## Configuration ##########
 
-NAME=petr4
-WEB_EXAMPLES=examples/checker_tests/good/table-entries-lpm-bmv2.p4
-WEB_EXAMPLES+=examples/checker_tests/good/switch_ebpf.p4
-WEB_EXAMPLES+=examples/checker_tests/good/union-valid-bmv2.p4
-WEB_EXAMPLES+=stf-test/custom-stf-tests/register.p4
+# See the file BUILD_ORGANIZATION.md
+# for explanations of why this is the way it is.
 
-.PHONY: all build clean test web
+-include CONFIGURE
 
-all: build
+# ##### Configure Coq #####
 
-build:
-	dune build @install
+# ANNOTATE=true   # label chatty output from coqc with file name
+ANNOTATE=silent   # suppress chatty output from coqc
+# ANNOTATE=false  # leave chatty output of coqc unchanged
+# ANNOTATE=echo   # like false, but in addition echo commands
 
-doc:
-	dune build @doc
+# DO NOT DISABLE coqc WARNINGS!  That would hinder the Coq team's continuous integration.
+COQC=$(COQBIN)coqc
+COQTOP=$(COQBIN)coqtop
+COQDEP=$(COQBIN)coqdep -vos
+COQDOC=$(COQBIN)coqdoc -d doc/html -g  $(DEPFLAGS)
+COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 
-run:
-	dune exec $(NAME)
+# Check Coq version
 
-install:
-	dune install
+# COQVERSION= 8.11.0 or-else 8.11.1 or-else 8.11.2 or-else 8.12+beta1 or-else 8.12.0
 
-test-stf:
-	dune exec stf-test/test.exe
+# COQV=$(shell $(COQC) -v)
+# ifneq ($(IGNORECOQVERSION),true)
+#   ifeq ("$(filter $(COQVERSION),$(COQV))","")
+#     $(error FAILURE: You need Coq $(COQVERSION) but you have this version: $(COQV))
+#   endif
+# endif
 
-test:
-	cd test && dune exec ./test.exe
+# ########## File Lists ##########
+
+FILES = \
+  Info.v Types.v Typed.v Prog.v
+
+
+# ########## Rules ##########
+
+COQFLAGS=-R . ProD3
+
+%.vo: COQF=$(COQFLAGS)
+
+%.vo: %.v
+	@echo COQC $*.v
+ifeq ($(TIMINGS), true)
+#	bash -c "wc $*.v >>timings; date +'%s.%N before' >> timings; $(COQC) $(COQF) $*.v; date +'%s.%N after' >>timings" 2>>timings
+	echo true timings
+	@bash -c "/usr/bin/time --output=TIMINGS -a -f '%e real, %U user, %S sys %M mem, '\"$(shell wc $*.v)\" $(COQC) $(COQF) $*.v"
+#	echo -n $*.v " " >>TIMINGS; bash -c "/usr/bin/time -o TIMINGS -a $(COQC) $(COQF) $*.v"
+else ifeq ($(TIMINGS), simple)
+	@/usr/bin/time -f 'TIMINGS %e real, %U user, %S sys %M kbytes: '"$*.v" $(COQC) $(COQF) $*.v
+else ifeq ($(strip $(ANNOTATE)), true)
+	@$(COQC) $(COQF) $*.v | awk '{printf "%s: %s\n", "'$*.v'", $$0}'
+else ifeq ($(strip $(ANNOTATE)), silent)
+	@$(COQC) $(COQF) $*.v >/dev/null
+else ifeq ($(strip $(ANNOTATE)), echo)
+	$(COQC) $(COQF) $*.v >/dev/null
+else
+	@$(COQC) $(COQF) $*.v
+#	@util/annotate $(COQC) $(COQF) $*.v
+endif
+
+
+# ########## Targets ##########
+
+default_target: extraction
+
+extraction: extraction/STAMP
+
+extraction/STAMP: files extraction/extraction.v
+	@rm -f extraction/*.ml extraction/*.mli
+	@$(COQBIN)coqtop $(COQFLAGS) -batch -load-vernac-source extraction/extraction.v
+#	@$(COQC) $(COQFLAGS) extraction/extraction.v
+	@touch extraction/STAMP
+
+files: _CoqProject $(FILES:.v=.vo)
 
 clean:
-	dune clean
+	@rm *.vo *.vos *.vok .*.aux _CoqProject
 
-web:
-	mkdir -p html_build/p4
-	cp $(WEB_EXAMPLES) html_build/p4
-	cd web && dune build ./web.bc.js --profile release && cp ../_build/default/web/web.bc.js ../html_build/ && cd ..
+_CoqProject: Makefile
+	@echo $(COQFLAGS) > _CoqProject
+
+.depend depend:
+	@echo 'coqdep ... >.depend'
+	@$(COQDEP) $(COQFLAGS) 2>&1 >.depend $(FILES) | grep -v 'Warning:.*found in the loadpath' || true
+
+include .depend
+
