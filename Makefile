@@ -3,7 +3,9 @@
 # See the file BUILD_ORGANIZATION.md
 # for explanations of why this is the way it is.
 
--include CONFIGURE
+
+.PHONY: all build claims clean test test-stf web
+
 
 # ##### Configure Coq #####
 
@@ -23,12 +25,12 @@ COQLIB=$(shell $(COQC) -where | tr -d '\r' | tr '\\' '/')
 
 # COQVERSION= 8.11.0 or-else 8.11.1 or-else 8.11.2 or-else 8.12+beta1 or-else 8.12.0
 
-# COQV=$(shell $(COQC) -v)
-# ifneq ($(IGNORECOQVERSION),true)
-#   ifeq ("$(filter $(COQVERSION),$(COQV))","")
-#     $(error FAILURE: You need Coq $(COQVERSION) but you have this version: $(COQV))
-#   endif
-# endif
+
+claims:
+	@test/claims.py
+
+test-stf:
+	dune exec bin/test.exe
 
 # ########## File Lists ##########
 
